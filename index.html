@@ -1,0 +1,243 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASO ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e1e2e 0%, #3a3a5e 100%); /* خلفية ليلية رومانسية */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* شاشة الدخول */
+        #login-screen { display: block; }
+        
+        input {
+            width: 80%;
+            padding: 12px;
+            margin: 15px 0;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 25px;
+            text-align: center;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        button {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background: #ff6b81;
+        }
+
+        /* المحتوى */
+        #main-content { display: none; }
+        
+        .slide {
+            display: none;
+            animation: fadeIn 1s ease;
+        }
+
+        .active-slide { display: block; }
+
+        h1 { color: #ff6b81; margin-bottom: 10px; font-size: 1.8rem;}
+        p { margin-bottom: 15px; font-size: 1.1rem; line-height: 1.6; }
+
+        /* تنسيق الصور */
+        .photo-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .photo-frame {
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.3);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* العداد */
+        .timer-box {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 15px;
+        }
+
+        .time-unit { display: flex; flex-direction: column; }
+        .time-unit span { font-weight: bold; color: #ff6b81; font-size: 1.3rem; }
+        .time-unit label { font-size: 0.7rem; color: #ddd; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .heart {
+            color: #ff4757;
+            font-size: 3rem;
+            animation: beat 1.2s infinite alternate;
+            margin-bottom: 10px;
+        }
+
+        @keyframes beat { to { transform: scale(1.1); } }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        
+        <div id="login-screen">
+            <div class="heart">❤️</div>
+            <h2>أدخل كلمة السر</h2>
+            <input type="password" id="password" placeholder="Password">
+            <br>
+            <button onclick="checkPassword()">دخول</button>
+            <p id="error-msg" style="color: #ff6b81; display: none; margin-top: 10px;">خطأ في الباسورد</p>
+        </div>
+
+        <div id="main-content">
+            
+            <div class="slide active-slide" id="slide1">
+                <h1>ASO</h1>
+                <p>كل لحظة بقضيها معاكِ بتبقى أجمل لحظة في عمري.<br>وجودك خلى للحياة طعم تاني.</p>
+                <button onclick="nextSlide(2)">التالي</button>
+            </div>
+
+            <div class="slide" id="slide2">
+                <h1>ذكرياتنا الحلوة</h1>
+                <div class="photo-gallery">
+                    <div class="photo-frame">
+                        <img src="img1.jpg" alt="عيونك">
+                    </div>
+                    <div class="photo-frame">
+                        <img src="img2.jpg" alt="فيلم">
+                    </div>
+                </div>
+                <p>في عيونك دنيتي، وفي قربك راحتي.</p>
+                <button onclick="nextSlide(3)">التالي</button>
+            </div>
+
+            <div class="slide" id="slide3">
+                <h1>إحنا سوا من</h1>
+                <p style="font-size: 0.9rem; color: #aaa;">من 1 ديسمبر 2025</p>
+                <div class="timer-box">
+                    <div class="time-unit"><span id="days">0</span><label>يوم</label></div>
+                    <div class="time-unit"><span id="hours">0</span><label>ساعة</label></div>
+                    <div class="time-unit"><span id="minutes">0</span><label>دقيقة</label></div>
+                    <div class="time-unit"><span id="seconds">0</span><label>ثانية</label></div>
+                </div>
+                <br>
+                <p>وربنا يخلينا لبعض العمر كله ❤️</p>
+                <button onclick="nextSlide(1)">العودة</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // التحقق من الباسورد
+        function checkPassword() {
+            const pass = document.getElementById('password').value;
+            // يقبل ASO أو aso
+            if(pass === "ASO" || pass === "aso") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                // تشغيل الموسيقى
+                var audio = document.getElementById('bg-music');
+                audio.volume = 0.5; // درجة الصوت 50%
+                audio.play().catch(e => console.log("يجب الضغط لتشغيل الصوت"));
+                startTimer();
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+
+        // التنقل بين الشرائح
+        function nextSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active-slide'));
+            document.getElementById('slide' + n).classList.add('active-slide');
+        }
+
+        // العداد
+        function startTimer() {
+            // التاريخ: 1 ديسمبر 2025
+            // شهر ديسمبر رقمه 11 في البرمجة
+            const startDate = new Date(2025, 11, 1); 
+            
+            setInterval(() => {
+                const now = new Date();
+                const diff = now - startDate;
+
+                // منع ظهور أرقام سالبة إذا كان التاريخ في المستقبل
+                if (diff < 0) {
+                     document.getElementById('days').innerText = "0";
+                     return;
+                }
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('days').innerText = days;
+                document.getElementById('hours').innerText = hours;
+                document.getElementById('minutes').innerText = minutes;
+                document.getElementById('seconds').innerText = seconds;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
