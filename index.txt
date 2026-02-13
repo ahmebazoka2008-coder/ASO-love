@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إلى ملكتي ASO ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* التنسيقات الأساسية (نفس التنسيقات السابقة مع إضافة شاشة القفل) */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        body { background: #1a1a2e; min-height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; overflow: hidden; color: #fff; position: relative; }
+        
+        .container { width: 90%; max-width: 400px; background: rgba(255, 255, 255, 0.1); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2); z-index: 10; position: relative; }
+
+        /* شاشة القفل قبل ميعاد الفالنتاين */
+        #lock-screen { display: flex; flex-direction: column; align-items: center; }
+        .wait-timer { font-size: 2rem; color: #ff4757; font-weight: bold; margin: 20px 0; }
+
+        /* شاشات الموقع (مخفية في البداية) */
+        #login-screen, #main-content { display: none; }
+
+        /* القلوب المتساقطة */
+        .heart-fall { position: absolute; top: -10%; color: rgba(255, 71, 87, 0.6); font-size: 20px; z-index: 0; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+
+        input { width: 80%; padding: 12px; margin: 15px 0; background: rgba(255,255,255,0.9); border: none; border-radius: 25px; text-align: center; outline: none; color: #333; }
+        button { background: #ff4757; color: white; border: none; padding: 10px 30px; border-radius: 25px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .slide { display: none; animation: fadeIn 1s ease; }
+        .active-slide { display: block; }
+        .photo-frame { width: 100%; border-radius: 15px; overflow: hidden; margin: 15px 0; border: 3px solid white; }
+        .photo-frame img { width: 100%; display: block; }
+        .typewriter { font-size: 1.2rem; min-height: 60px; margin-bottom: 20px; color: #ffeb3b; }
+        .timer-box { display: flex; justify-content: space-around; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 15px; }
+        .time-unit span { display: block; font-size: 1.4rem; color: #ff4757; font-weight: bold; }
+        #no-btn { position: relative; background: #6c757d; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop><source src="music.mp3" type="audio/mpeg"></audio>
+
+    <div class="container">
+        
+        <div id="lock-screen">
+            <div style="font-size: 3rem;">🔒</div>
+            <h2 style="margin-top: 10px;">صبراً يا ملكتي..</h2>
+            <p>الموقع هيفتح في ميعاده بالثانية</p>
+            <div id="wait-countdown" class="wait-timer">00:00:00</div>
+            <p style="font-size: 0.8rem; color: #aaa;">فاضل تكّة على مفاجأة حمودي</p>
+        </div>
+
+        <div id="login-screen">
+            <h2 style="margin-bottom: 10px;">وحشتيني ❤️</h2>
+            <p>أدخلي كلمة السر يا ملكتي</p>
+            <input type="password" id="password" placeholder="Password">
+            <br>
+            <button onclick="checkPassword()">دخول عالمي الخاص</button>
+        </div>
+
+        <div id="main-content">
+            <div class="slide active-slide" id="slide1">
+                <h1>يا ملكة قلبي</h1>
+                <p id="text-msg" class="typewriter"></p>
+                <button onclick="nextSlide(2)">شوفي دي كمان..</button>
+            </div>
+            <div class="slide" id="slide2">
+                <h2>أحلى ذكريات حمودي</h2>
+                <div class="photo-frame"><img src="img1.jpg"></div>
+                <div class="photo-frame"><img src="img2.jpg"></div>
+                <button onclick="nextSlide(3)">التالي</button>
+            </div>
+            <div class="slide" id="slide3">
+                <h2>إحنا سوا من</h2>
+                <div class="timer-box">
+                    <div class="time-unit"><span id="days">0</span>يوم</div>
+                    <div class="time-unit"><span id="hours">0</span>ساعة</div>
+                    <div class="time-unit"><span id="minutes">0</span>دقيقة</div>
+                    <div class="time-unit"><span id="seconds">0</span>ثانية</div>
+                </div>
+                <p style="margin-top: 20px;">هتفضلي منورة دنيتي السنة دي وكل سنة؟</p>
+                <div style="margin-top: 15px;">
+                    <button onclick="alert('كنت عارف إنك هتقولي كدة يا حبيبة قلب حمودي! بحبك ❤️')">أكيد طبعاً!</button>
+                    <button id="no-btn" onmouseover="moveButton()">لأ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- ميعاد الفتح (14 فبراير 2026 الساعة 00:00:00) ---
+        const unlockDate = new Date(2026, 1, 14, 0, 0, 0).getTime();
+
+        const checkLock = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = unlockDate - now;
+
+            if (distance > 0) {
+                // الموقع لسه مقفول - تحديث العداد
+                const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((distance % (1000 * 60)) / 1000);
+                document.getElementById("wait-countdown").innerHTML = h + "h " + m + "m " + s + "s ";
+            } else {
+                // الساعة جت 12! افتح الموقع
+                clearInterval(checkLock);
+                document.getElementById("lock-screen").style.display = "none";
+                document.getElementById("login-screen").style.display = "block";
+            }
+        }, 1000);
+
+        // --- باقي وظائف الموقع (الباسورد والقلوب والعداد) ---
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-fall');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+
+        function checkPassword() {
+            const pass = document.getElementById('password').value;
+            if(pass.toUpperCase() === "ASO") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                document.getElementById('bg-music').play();
+                setInterval(createHeart, 300);
+                startTypewriter();
+                startTimer();
+            }
+        }
+
+        const message = "إلى ملكتي ASO.. حبيبتي وقلب حمودي من جوه، كل عيد حب وأنتِ معايا ومحليا دنيتي بوجودك..";
+        function startTypewriter() {
+            let i = 0;
+            const element = document.getElementById('text-msg');
+            function type() {
+                if (i < message.length) {
+                    element.innerHTML += message.charAt(i);
+                    i++;
+                    setTimeout(type, 100);
+                }
+            }
+            type();
+        }
+
+        function moveButton() {
+            const btn = document.getElementById('no-btn');
+            btn.style.position = 'fixed';
+            btn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+            btn.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+        }
+
+        function nextSlide(n) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active-slide'));
+            document.getElementById('slide' + n).classList.add('active-slide');
+        }
+
+        function startTimer() {
+            const startDate = new Date(2025, 11, 1); 
+            setInterval(() => {
+                const diff = new Date() - startDate;
+                document.getElementById('days').innerText = Math.floor(diff / 86400000);
+                document.getElementById('hours').innerText = Math.floor((diff / 3600000) % 24);
+                document.getElementById('minutes').innerText = Math.floor((diff / 60000) % 60);
+                document.getElementById('seconds').innerText = Math.floor((diff / 1000) % 60);
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
